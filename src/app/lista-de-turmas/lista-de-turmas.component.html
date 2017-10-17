@@ -1,0 +1,28 @@
+<table class="table table-hover">
+  <thead>
+      <tr>
+          <th>Nº da turma</th>
+          <th>Nome</th>
+          <th>Status</th>
+          <th>Ações</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let turma of listaTurmas">
+          <td> {{turma.numeroTurma}} </td>
+          <td> {{turma.nome}} </td>
+          <td> {{turma.status}} </td>
+          <td>
+              <button class="btn btn-primary btn-sm" (click)="editTurma(turma)" title="Editar Turma">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="deleteTurma(turma)" title="Excluir Turma">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-info btn-sm" (click)="viewAlunos(turma)" title="Ver Alunos">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+              </button>
+          </td>
+      </tr>
+  </tbody>
+</table>
