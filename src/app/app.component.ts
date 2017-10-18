@@ -68,6 +68,7 @@ export class AppComponent implements OnInit {
     }
 
     editTurma(turma: Turma): void{
+        this.alteraForm('turma');
         this.novaTurma = turma;
         this.editando = true;
     }
