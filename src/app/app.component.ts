@@ -107,7 +107,7 @@ export class AppComponent implements OnInit {
         } else {
             this.mediaFinalAluno = this.novo.calculaMediaFinal(this.novo.nota1, this.novo.nota2, this.novo.nota3, this.novo.nota4);
             this.situacao = this.novo.situacaoFinal(this.mediaFinalAluno, this.novo.totalFrequencia);
-            this.alunoTurma.push(new AlunoTurma(null,this.novo.nome,this.novo.periodo, this.turma,this.novo.nota1,this.novo.nota2,this.novo.nota3, this.novo.nota4, this.novo.totalFrequencia,this.mediaFinalAluno, this.situacao));            
+            // this.alunoTurma.push(new AlunoTurma(null,this.novo.nome,this.novo.periodo, this.turma,this.novo.nota1,this.novo.nota2,this.novo.nota3, this.novo.nota4, this.novo.totalFrequencia,this.mediaFinalAluno, this.situacao));            
             this.novo = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null);
             this.editando = false;
         }
