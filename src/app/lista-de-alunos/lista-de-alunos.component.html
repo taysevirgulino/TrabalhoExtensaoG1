@@ -21,6 +21,7 @@
             <td>{{alunoTurma.totalFrequencia}}</td>            
             <td class="table-success" *ngIf="alunoTurma.situacao == 'Aprovado'">{{alunoTurma.situacao}}</td>
             <td class="table-danger" *ngIf="alunoTurma.situacao == 'Reprovado' || alunoTurma.situacao == 'Reprovado por Falta'">{{alunoTurma.situacao}}</td>
+            <td *ngIf="alunoTurma.situacao == null">N/I</td>
             <td>
             <button class="btn btn-primary btn-sm" (click)="editAluno(alunoTurma)" title="Editar Aluno">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
