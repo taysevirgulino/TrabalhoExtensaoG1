@@ -9,20 +9,15 @@ import '../assets/css/style.css';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    public idAluno: number = null;
-    public nome: string;
-    public periodo: number = null;
     public turmas: Array<Turma>;
     public turma: Turma;
     public alunoTurma: Array<AlunoTurma>;
     public alunoTurmaBackup: Array<AlunoTurma>;
-    public novaTurma: Turma = new Turma(null, '', '') ;
+    public novaTurma: Turma = new Turma(null, '', '');
     public listarAlunos : boolean;
-    public novo: AlunoTurma = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null);
+    public novo: AlunoTurma = new AlunoTurma('',new Turma(null, '', ''));
     public editando = false;
-    public id : number;
-    public mediaFinalAluno : any;
-    public situacao : any;
+    public mediaTurma: string;
     public btnCadastrarAluno: boolean;
     public cadastrarTurma: boolean;
     public cadastrarAluno: boolean;
@@ -41,11 +36,10 @@ export class AppComponent implements OnInit {
         ];
 
         this.alunoTurma = [
-            new AlunoTurma(1,'Ana Clara', 5, this.turmas[0], 8, 7, 8, 8, 200, 7.7, 'Aprovado'),
-            new AlunoTurma(2, 'Karol Dias', 6, this.turmas[1], 7, 5, 7, 7, 160, 6.5, 'Reprovado'),
-            new AlunoTurma(3,'João Carlos', 6, this.turmas[0], 9, 5, 6, 8, 80, 7, 'Reprovado por Falta')
+            new AlunoTurma('Ana Clara', this.turmas[0],5, 8, 7, 8, 8, 200),
+            new AlunoTurma('Camila Dias', this.turmas[1], 6, 5, 6, 7, 9, 160),
+            new AlunoTurma('João Carlos', this.turmas[0], 5, 6, 8, 7, 8, 80)
         ];
-        console.log(this.alunoTurma);
     }
 
     ngOnInit(): void {
@@ -64,7 +58,7 @@ export class AppComponent implements OnInit {
 
     limpar(){
         this.novaTurma = new Turma(null, '', '');
-        this.novo = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null );
+        this.novo = new AlunoTurma('',new Turma(null, '', ''));
     }
 
     editTurma(turma: Turma): void{
@@ -88,34 +82,46 @@ export class AppComponent implements OnInit {
         this.novaTurma = new Turma(null, '', '');
     }
 
+    calcularMediaDaTurma(alunos) {
+        let acumulador: number = 0;
+        let denominador: number = 0;
+        let final: number = 0;
+        for (let i = 0; i < alunos.length; i++) {
+            let media = alunos[i].calculaMediaFinal();
+            if (media) {
+                acumulador += media;
+                denominador++;
+            }
+        }
+        if (acumulador == 0 && denominador == 0) {
+            this.mediaTurma = null;
+        } else {
+            final = acumulador / denominador;
+            this.mediaTurma = final.toFixed(2);
+        }
+    }
+
     viewAlunosTurma(turma: Turma): void{
         this.alunoTurmaBackup = this.alunoTurma.filter(alunoTurma => alunoTurma.turma.numeroTurma == turma.numeroTurma);
         this.listarAlunos = true;
         this.btnCadastrarAluno = true;
         this.turma = turma;
+        this.calcularMediaDaTurma(this.alunoTurmaBackup);
     }
 
     createAluno(): void {  
-        if (!this.editando) {
-            const idAluno: number = this.alunoTurma.length + 1;
-            this.mediaFinalAluno = this.novo.calculaMediaFinal(this.novo.nota1, this.novo.nota2, this.novo.nota3, this.novo.nota4);
-            this.situacao = this.novo.situacaoFinal(this.mediaFinalAluno, this.novo.totalFrequencia);
-           
-            this.alunoTurma.push(new AlunoTurma(idAluno,this.novo.nome,this.novo.periodo, this.turma,this.novo.nota1,this.novo.nota2,this.novo.nota3, this.novo.nota4, this.novo.totalFrequencia,this.mediaFinalAluno, this.situacao));
-            this.novo = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null);
-
+        if (!this.editando) {           
+            this.alunoTurma.push(new AlunoTurma(this.novo.nome, this.turma, this.novo.periodo,this.novo.nota1,this.novo.nota2,this.novo.nota3, this.novo.nota4, this.novo.totalFrequencia));
+            this.novo = new AlunoTurma('',new Turma(null, '', ''));
             this.viewAlunosTurma(this.turma);
         } else {
-            this.mediaFinalAluno = this.novo.calculaMediaFinal(this.novo.nota1, this.novo.nota2, this.novo.nota3, this.novo.nota4);
-            this.situacao = this.novo.situacaoFinal(this.mediaFinalAluno, this.novo.totalFrequencia);
-            // this.alunoTurma.push(new AlunoTurma(null,this.novo.nome,this.novo.periodo, this.turma,this.novo.nota1,this.novo.nota2,this.novo.nota3, this.novo.nota4, this.novo.totalFrequencia,this.mediaFinalAluno, this.situacao));            
-            this.novo = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null);
+            this.novo = new AlunoTurma('',new Turma(null, '', ''));
+            this.viewAlunosTurma(this.turma);
             this.editando = false;
         }
     }
 
     editAluno(alunoTurma: AlunoTurma): void{
-        console.log(alunoTurma);
         this.alteraForm('aluno');
         this.novo = alunoTurma;
         this.editando = true;  
@@ -124,6 +130,9 @@ export class AppComponent implements OnInit {
     deleteAluno(alunoTurma: AlunoTurma): void{ 
         this.alunoTurma.splice(this.alunoTurma.indexOf(alunoTurma), 1); 
         this.alunoTurmaBackup.splice(this.alunoTurmaBackup.indexOf(alunoTurma), 1); 
-        this.novo = new AlunoTurma(null, '', null, new Turma(null, '', ''), null, null, null, null, null, null );
+        this.calcularMediaDaTurma(this.alunoTurmaBackup)
+        this.novo = new AlunoTurma('',new Turma(null, '', ''));
     }
 }
+
+

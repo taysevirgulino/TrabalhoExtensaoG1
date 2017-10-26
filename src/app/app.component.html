@@ -25,7 +25,7 @@
                 <p class="lead">
                     <button class="btn btn-primary" *ngIf="btnCadastrarAluno" (click)="alteraForm('aluno')"><i class="fa fa-plus" aria-hidden="true" ></i> Cadastrar Aluno</button>
                 </p>
-                <app-lista-de-alunos *ngIf="listarAlunos" [listaAlunos]="alunoTurmaBackup"
+                <app-lista-de-alunos *ngIf="listarAlunos" [listaAlunos]="alunoTurmaBackup" [mediaTurma]="mediaTurma"
                     (onEditar)="editAluno($event)" 
                     (onExcluir)="deleteAluno($event)">  
                 </app-lista-de-alunos>

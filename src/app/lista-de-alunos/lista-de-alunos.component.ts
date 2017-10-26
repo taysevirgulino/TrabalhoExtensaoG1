@@ -11,6 +11,9 @@ export class ListaDeAlunosComponent implements OnInit {
   @Input()
   listaAlunos: Array<AlunoTurma>;
 
+  @Input()
+  mediaTurma: number;
+
   @Output()
   onEditar = new EventEmitter<AlunoTurma>();
 
